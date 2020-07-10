@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ToggleButton">
+        <attr name="enableRoundColor" format="color" />
+        <attr name="disableRoundColor" format="color" />
+        <attr name="enableBackgroundColor" format="color" />
+        <attr name="disableBackgroundColor" format="color" />
+        <attr name="enable" format="boolean" />
+    </declare-styleable>
+</resources>
