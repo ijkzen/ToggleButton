@@ -440,8 +440,8 @@ class ToggleButton : View {
     }
 
     fun setDuration(duration: Int) {
-        mDuration = if (duration < 200) {
-            200
+        mDuration = if (duration < 300) {
+            300
         } else {
             duration
         }
