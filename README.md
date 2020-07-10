@@ -17,10 +17,12 @@ allprojects {
 
 2. Add the dependency
 
+![bage](https://jitpack.io/v/ijkzen/ToggleButton.svg)
+
 ```groovy
 dependencies {
     ...
-    implementation 'com.github.ijkzen:ToggleButton:releasev1.0.0'
+    implementation 'com.github.ijkzen:ToggleButton:<latest_version>'
 }
 ```
 
