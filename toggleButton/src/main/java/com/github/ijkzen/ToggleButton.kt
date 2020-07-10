@@ -1,4 +1,4 @@
-package tech.ijkzen.component
+package com.github.ijkzen
 
 import android.content.Context
 import android.graphics.Canvas

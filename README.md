@@ -28,6 +28,27 @@ dependencies {
 
 ### Practice
 
+0. Example
+
+```xml
+<com.github.ijkzen.ToggleButton
+        android:id="@+id/toggle2"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/toggle"
+        android:layout_marginTop="30dp"
+        app:enable="true"
+        app:enableBackgroundColor="@android:color/holo_red_light"
+        app:enableRoundColor="@android:color/holo_green_light"
+        app:disableBackgroundColor="@android:color/holo_green_light"
+        app:disableRoundColor="@android:color/holo_red_light"
+        android:layout_width="120dp"
+        android:layout_height="70dp"/>
+```
+
+
+
+
+
 1. Use `attributes` on xml
 
 ![attrs](./preview/attrs.png)
