@@ -96,6 +96,13 @@ class ToggleButton : View {
             )
         )
 
+        val duration = typedArray.getInt(R.styleable.ToggleButton_duration, 300)
+        mDuration = if (duration < 300) {
+            300
+        } else {
+            duration
+        }
+
         mIsEnable = typedArray.getBoolean(R.styleable.ToggleButton_enable, false)
 
         typedArray.recycle()

@@ -12,8 +12,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-        mBinding.toggleButton.setOnClickListener {
-            mBinding.toggleButton.toggle()
+
+        mBinding.toggle1.setOnClickListener{
+            mBinding.toggle1.toggle()
+        }
+
+        mBinding.toggle2.setOnClickListener{
+            mBinding.toggle2.toggle()
+        }
+
+        mBinding.toggle.setOnClickListener {
+            mBinding.toggle.toggle()
         }
     }
 }

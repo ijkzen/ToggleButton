@@ -5,6 +5,7 @@
         <attr name="disableRoundColor" format="color" />
         <attr name="enableBackgroundColor" format="color" />
         <attr name="disableBackgroundColor" format="color" />
+        <attr name="duration" format="integer"/>
         <attr name="enable" format="boolean" />
     </declare-styleable>
 </resources>
