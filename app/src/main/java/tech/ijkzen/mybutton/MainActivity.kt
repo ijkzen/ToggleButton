@@ -1,8 +1,8 @@
-package com.example.mybutton
+package tech.ijkzen.mybutton
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.mybutton.databinding.ActivityMainBinding
+import tech.ijkzen.mybutton.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 

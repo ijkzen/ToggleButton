@@ -1,10 +1,12 @@
-package com.example.miui_toggle_button
+package tech.ijkzen.component
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PointF
+import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
@@ -63,25 +65,35 @@ class ToggleButton : View {
 
     private fun initAttrs(attributes: AttributeSet?) {
 
-        val typedArray = context.obtainStyledAttributes(attributes, R.styleable.ToggleButton)
+        val typedArray = context.obtainStyledAttributes(attributes,
+            R.styleable.ToggleButton
+        )
         mEnableBackgroundColor = typedArray.getColor(
             R.styleable.ToggleButton_enableBackgroundColor,
-            ContextCompat.getColor(context, R.color.enableBackgroundColor)
+            ContextCompat.getColor(context,
+                R.color.enableBackgroundColor
+            )
         )
 
         mEnableRoundColor = typedArray.getColor(
             R.styleable.ToggleButton_enableRoundColor,
-            ContextCompat.getColor(context, R.color.enableRoundColor)
+            ContextCompat.getColor(context,
+                R.color.enableRoundColor
+            )
         )
 
         mDisableBackgroundColor = typedArray.getColor(
             R.styleable.ToggleButton_disableBackgroundColor,
-            ContextCompat.getColor(context, R.color.disableBackgroundColor)
+            ContextCompat.getColor(context,
+                R.color.disableBackgroundColor
+            )
         )
 
         mDisableRoundColor = typedArray.getColor(
             R.styleable.ToggleButton_disableRoundColor,
-            ContextCompat.getColor(context, R.color.disableRoundColor)
+            ContextCompat.getColor(context,
+                R.color.disableRoundColor
+            )
         )
 
         mIsEnable = typedArray.getBoolean(R.styleable.ToggleButton_enable, false)
@@ -123,18 +135,33 @@ class ToggleButton : View {
         super.onLayout(changed, left, top, right, bottom)
         mDefaultRoundCenterY = height / 2
 
-        mDefaultMinRadius = mDefaultRoundCenterY - convertDp2Px(8, context)
-        mDefaultNormalRadius = mDefaultRoundCenterY - convertDp2Px(7, context)
-        mDefaultMiddleRadius = mDefaultRoundCenterY - convertDp2Px(5, context)
-        mDefaultMaxRadius = mDefaultRoundCenterY - convertDp2Px(3, context)
+        mDefaultMinRadius = mDefaultRoundCenterY - convertDp2Px(
+            8,
+            context
+        )
+        mDefaultNormalRadius = mDefaultRoundCenterY - convertDp2Px(
+            7,
+            context
+        )
+        mDefaultMiddleRadius = mDefaultRoundCenterY - convertDp2Px(
+            5,
+            context
+        )
+        mDefaultMaxRadius = mDefaultRoundCenterY - convertDp2Px(
+            3,
+            context
+        )
     }
 
     private fun initDefaultSize() {
         mDefaultWidth = convertDp2Px(56, context)
-        mDefaultHeight = convertDp2Px(30, context)
+        mDefaultHeight =
+            convertDp2Px(30, context)
 
-        mDefaultCircleMinPadding = convertDp2Px(4, context)
-        mDefaultCircleMaxPadding = convertDp2Px(8, context)
+        mDefaultCircleMinPadding =
+            convertDp2Px(4, context)
+        mDefaultCircleMaxPadding =
+            convertDp2Px(8, context)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -230,7 +257,6 @@ class ToggleButton : View {
         }
 
         val tmp :Float= (currentTime - mTouchUpTime) / mDuration.toFloat()
-        Log.e("test", "tmp: $tmp")
 
         return when {
             tmp <= 0 -> {
@@ -241,7 +267,6 @@ class ToggleButton : View {
             }
             else -> {
                 val alpha = 100 - (tmp * 100).toInt()
-                Log.e("test", "alpha: $alpha")
                 if (alpha > 50) {
                     val drawable = ColorDrawable(a)
                     drawable.alpha = alpha

@@ -1,4 +1,4 @@
-package com.example.miui_toggle_button
+package tech.ijkzen.component
 
 import android.content.Context
 import android.util.DisplayMetrics
