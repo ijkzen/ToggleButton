@@ -39,8 +39,6 @@ class ToggleButton : View {
 
     private var mDefaultNormalRadius = 0
 
-    private var mDefaultMiddleRadius = 0
-
     private var mDefaultMaxRadius = 0
 
     private var mDefaultCircleMaxPadding = 0
@@ -51,7 +49,11 @@ class ToggleButton : View {
 
     private var mIsChanged = false
 
-    private var mDuration = 300
+    private var mDuration = DEFAULT_DURATION
+
+    companion object {
+        private const val DEFAULT_DURATION = 300
+    }
 
 
     constructor(context: Context?) : super(context) {
@@ -65,40 +67,45 @@ class ToggleButton : View {
 
     private fun initAttrs(attributes: AttributeSet?) {
 
-        val typedArray = context.obtainStyledAttributes(attributes,
+        val typedArray = context.obtainStyledAttributes(
+            attributes,
             R.styleable.ToggleButton
         )
         mEnableBackgroundColor = typedArray.getColor(
             R.styleable.ToggleButton_enableBackgroundColor,
-            ContextCompat.getColor(context,
+            ContextCompat.getColor(
+                context,
                 R.color.enableBackgroundColor
             )
         )
 
         mEnableRoundColor = typedArray.getColor(
             R.styleable.ToggleButton_enableRoundColor,
-            ContextCompat.getColor(context,
+            ContextCompat.getColor(
+                context,
                 R.color.enableRoundColor
             )
         )
 
         mDisableBackgroundColor = typedArray.getColor(
             R.styleable.ToggleButton_disableBackgroundColor,
-            ContextCompat.getColor(context,
+            ContextCompat.getColor(
+                context,
                 R.color.disableBackgroundColor
             )
         )
 
         mDisableRoundColor = typedArray.getColor(
             R.styleable.ToggleButton_disableRoundColor,
-            ContextCompat.getColor(context,
+            ContextCompat.getColor(
+                context,
                 R.color.disableRoundColor
             )
         )
 
-        val duration = typedArray.getInt(R.styleable.ToggleButton_duration, 300)
-        mDuration = if (duration < 300) {
-            300
+        val duration = typedArray.getInt(R.styleable.ToggleButton_duration, DEFAULT_DURATION)
+        mDuration = if (duration < DEFAULT_DURATION) {
+            DEFAULT_DURATION
         } else {
             duration
         }
@@ -140,18 +147,14 @@ class ToggleButton : View {
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        mDefaultRoundCenterY = height / 2
 
+        mDefaultRoundCenterY = height / 2
         mDefaultMinRadius = mDefaultRoundCenterY - convertDp2Px(
             8,
             context
         )
         mDefaultNormalRadius = mDefaultRoundCenterY - convertDp2Px(
             7,
-            context
-        )
-        mDefaultMiddleRadius = mDefaultRoundCenterY - convertDp2Px(
-            5,
             context
         )
         mDefaultMaxRadius = mDefaultRoundCenterY - convertDp2Px(
@@ -162,13 +165,10 @@ class ToggleButton : View {
 
     private fun initDefaultSize() {
         mDefaultWidth = convertDp2Px(56, context)
-        mDefaultHeight =
-            convertDp2Px(30, context)
+        mDefaultHeight = convertDp2Px(30, context)
 
-        mDefaultCircleMinPadding =
-            convertDp2Px(4, context)
-        mDefaultCircleMaxPadding =
-            convertDp2Px(8, context)
+        mDefaultCircleMinPadding = convertDp2Px(4, context)
+        mDefaultCircleMaxPadding = convertDp2Px(8, context)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -263,7 +263,7 @@ class ToggleButton : View {
             b = mDisableRoundColor
         }
 
-        val tmp :Float= (currentTime - mTouchUpTime) / mDuration.toFloat()
+        val tmp: Float = (currentTime - mTouchUpTime) / mDuration.toFloat()
 
         return when {
             tmp <= 0 -> {
@@ -440,8 +440,8 @@ class ToggleButton : View {
     }
 
     fun setDuration(duration: Int) {
-        mDuration = if (duration < 300) {
-            300
+        mDuration = if (duration < DEFAULT_DURATION) {
+            DEFAULT_DURATION
         } else {
             duration
         }
