@@ -11,7 +11,7 @@ import android.view.View
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 
-class ToggleButton : View {
+open class ToggleButton : View {
 
     private var mDefaultWidth = 0
 
