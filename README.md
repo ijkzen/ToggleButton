@@ -1,3 +1,4 @@
+![bage](https://jitpack.io/v/ijkzen/ToggleButton.svg) ![week_download](https://jitpack.io/v/ijkzen/ToggleButton/week.svg) ![month_download](https://jitpack.io/v/ijkzen/ToggleButton/month.svg)
 ### Preview
 
 ![preview](./preview/preview.gif)
