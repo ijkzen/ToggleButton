@@ -17,12 +17,8 @@ class MainActivity : AppCompatActivity() {
             mBinding.toggle1.toggle()
         }
 
-        mBinding.toggle2.setOnClickListener{
-            mBinding.toggle2.toggle()
-        }
-
-        mBinding.toggle.setOnClickListener {
-            mBinding.toggle.toggle()
+        mBinding.slideToggle.setOnClickListener {
+            mBinding.slideToggle.toggle()
         }
     }
 }
