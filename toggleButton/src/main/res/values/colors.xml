@@ -2,6 +2,6 @@
 <resources>
     <color name="disableBackgroundColor">#E5E5E5</color>
     <color name="disableRoundColor">#FFFFFF</color>
-    <color name="enableBackgroundColor">#0C84FF</color>
-    <color name="enableRoundColor">#FFFFFD</color>
+    <color name="enableBackgroundColor">#99DCF7</color>
+    <color name="enableRoundColor">#00A8EC</color>
 </resources>

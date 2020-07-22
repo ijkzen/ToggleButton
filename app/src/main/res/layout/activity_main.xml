@@ -14,14 +14,15 @@
         android:layout_marginBottom="30dp"
         android:layout_centerHorizontal="true"
         android:layout_width="120dp"
-        app:enableBackgroundColor="@android:color/holo_red_light"
         android:layout_height="50dp"/>
 
     <com.github.ijkzen.SlideToggle
         android:id="@+id/slide_toggle"
-        android:layout_width="120dp"
+        android:layout_width="wrap_content"
         android:layout_below="@id/toggle1"
         android:layout_marginTop="30dp"
         android:layout_centerHorizontal="true"
-        android:layout_height="60dp"/>
+        app:enable="true"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

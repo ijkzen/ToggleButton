@@ -3,12 +3,14 @@
 
     <attr name="enableBackgroundColor" format="color" />
     <attr name="disableBackgroundColor" format="color" />
+    <attr name="enableRoundColor" format="color" />
+    <attr name="disableRoundColor" format="color" />
     <attr name="duration" format="integer" />
     <attr name="enable" format="boolean" />
 
     <declare-styleable name="ToggleButton">
-        <attr name="enableRoundColor" format="color" />
-        <attr name="disableRoundColor" format="color" />
+        <attr name="enableRoundColor" />
+        <attr name="disableRoundColor" />
         <attr name="enableBackgroundColor" />
         <attr name="disableBackgroundColor" />
         <attr name="duration" />
@@ -16,7 +18,8 @@
     </declare-styleable>
 
     <declare-styleable name="SlideToggle">
-        <attr name="roundColor" format="color" />
+        <attr name="enableRoundColor" />
+        <attr name="disableRoundColor" />
         <attr name="enableBackgroundColor" />
         <attr name="disableBackgroundColor" />
         <attr name="enable" />

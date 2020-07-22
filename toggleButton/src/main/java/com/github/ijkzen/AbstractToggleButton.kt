@@ -24,6 +24,8 @@ abstract class AbstractToggleButton : View {
 
     protected var mEnableRoundColor = 0
 
+    protected var mDisableRoundColor = 0
+
     protected var mIsEnable = false
 
     protected var mIsChanged = false
@@ -36,8 +38,8 @@ abstract class AbstractToggleButton : View {
 
     companion object {
         const val DEFAULT_DURATION = 300
-        const val DEFAULT_WIDTH = 56
-        const val DEFAULT_HEIGHT = 30
+        const val DEFAULT_WIDTH = 45
+        const val DEFAULT_HEIGHT = 26
     }
 
     constructor(context: Context?) : super(context) {
@@ -158,6 +160,11 @@ abstract class AbstractToggleButton : View {
 
     fun setRoundEnableColor(@ColorRes color: Int) {
         mEnableRoundColor = color
+        invalidate()
+    }
+
+    fun setRoundDisableColor(@ColorRes color: Int) {
+        mDisableRoundColor = color
         invalidate()
     }
 

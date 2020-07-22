@@ -5,12 +5,9 @@ import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.RectF
 import android.util.AttributeSet
-import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 
 open class ToggleButton : AbstractToggleButton {
-
-    private var mDisableRoundColor = 0
 
     private var mDefaultMinRadius = 0
 
@@ -240,10 +237,5 @@ open class ToggleButton : AbstractToggleButton {
                 mDefaultNormalRadius.toFloat()
             }
         }
-    }
-
-    fun setRoundDisableColor(@ColorRes color: Int) {
-        mDisableRoundColor = color
-        invalidate()
     }
 }

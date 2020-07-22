@@ -32,8 +32,13 @@ open class SlideToggle : AbstractToggleButton {
         )
 
         mEnableRoundColor = typedArray.getColor(
-            R.styleable.SlideToggle_roundColor,
+            R.styleable.SlideToggle_enableRoundColor,
             ContextCompat.getColor(context, R.color.enableRoundColor)
+        )
+
+        mDisableRoundColor = typedArray.getColor(
+            R.styleable.SlideToggle_disableRoundColor,
+            ContextCompat.getColor(context, R.color.disableRoundColor)
         )
 
         val duration = typedArray.getInt(R.styleable.SlideToggle_duration, DEFAULT_DURATION)
@@ -83,7 +88,8 @@ open class SlideToggle : AbstractToggleButton {
 
     override fun drawRound(canvas: Canvas?) {
         val x = getRoundX()
-        mRoundPaint.color = Color.WHITE
+        mRoundPaint.color =
+            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis())
         mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
         canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
     }
