@@ -71,12 +71,15 @@ abstract class AbstractToggleButton : View {
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
 
+        val widthTmp = widthMode in arrayListOf<Int>(MeasureSpec.AT_MOST, MeasureSpec.UNSPECIFIED)
+        val heightTmp = heightMode in arrayListOf<Int>(MeasureSpec.AT_MOST, MeasureSpec.UNSPECIFIED)
+
         initDefaultSize()
-        if (widthMode == MeasureSpec.AT_MOST && heightMode == MeasureSpec.AT_MOST) {
+        if (widthTmp && heightTmp) {
             setMeasuredDimension(mDefaultWidth, mDefaultHeight)
-        } else if (widthMode == MeasureSpec.AT_MOST) {
+        } else if (widthTmp) {
             setMeasuredDimension(mDefaultWidth, heightSize)
-        } else if (heightMode == MeasureSpec.AT_MOST) {
+        } else if (heightTmp) {
             setMeasuredDimension(widthSize, mDefaultHeight)
         }
     }

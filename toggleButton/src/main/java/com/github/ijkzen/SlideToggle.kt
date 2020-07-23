@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 
 open class SlideToggle : AbstractToggleButton {
 
-    private var mRadius  = 0
+    private var mRadius = 0
     private var mStartRoundX: Int = 0
     private var mEndRoundX = 0
 
@@ -54,14 +54,14 @@ open class SlideToggle : AbstractToggleButton {
     }
 
     override fun initDefaultSize() {
-        mDefaultWidth = convertDp2Px(DEFAULT_WIDTH, context)
-        mDefaultHeight = convertDp2Px(DEFAULT_HEIGHT, context)
+        mDefaultWidth = convertDp2Px(DEFAULT_WIDTH + 4, context)
+        mDefaultHeight = convertDp2Px(DEFAULT_HEIGHT + 4, context)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
         val padding = convertDp2Px(2, context)
-        mRadius = (height - paddingTop - paddingBottom - convertDp2Px(4, context)) / 2
+        mRadius = (height - paddingTop - paddingBottom - 2 * padding) / 2
         mStartRoundX = paddingStart + mRadius + padding
         mEndRoundX = width - paddingEnd - padding - mRadius
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="disableBackgroundColor">#E5E5E5</color>
-    <color name="disableRoundColor">#FFFFFF</color>
+    <color name="disableBackgroundColor">#42231F1F</color>
+    <color name="disableRoundColor">#F1F1F1</color>
     <color name="enableBackgroundColor">#99DCF7</color>
     <color name="enableRoundColor">#00A8EC</color>
 </resources>
