@@ -90,7 +90,7 @@ open class SlideToggle : AbstractToggleButton {
     override fun drawRound(canvas: Canvas?) {
         val x = getRoundX()
         mRoundPaint.color =
-            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis(), 0)
+            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis(), 1)
         mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
         canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
     }

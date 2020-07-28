@@ -120,7 +120,7 @@ open class ToggleButton : AbstractToggleButton {
     override fun drawRound(canvas: Canvas?) {
         val currentTime = System.currentTimeMillis()
         val point = getCircleCenter(currentTime)
-        mRoundPaint.color = getCurrentColor(mEnableRoundColor, mDisableRoundColor, currentTime, 0)
+        mRoundPaint.color = getCurrentColor(mEnableRoundColor, mDisableRoundColor, currentTime, 1)
         canvas?.drawCircle(point.x, point.y, getRoundRadius(currentTime), mRoundPaint)
     }
 
