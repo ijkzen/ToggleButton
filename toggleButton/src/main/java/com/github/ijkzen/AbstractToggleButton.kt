@@ -104,7 +104,7 @@ abstract class AbstractToggleButton : View {
         }
     }
 
-    open fun getCurrentColor(enableColor: Int, disableColor: Int, currentTime: Long): Int {
+    open fun getCurrentColor(enableColor: Int, disableColor: Int, currentTime: Long, flag: Int): Int {
         if (!mIsChanged) {
             return if (mIsEnable) {
                 enableColor
