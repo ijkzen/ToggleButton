@@ -71,7 +71,8 @@ open class SlideToggle : AbstractToggleButton {
             getCurrentColor(
                 mEnableBackgroundColor,
                 mDisableBackgroundColor,
-                System.currentTimeMillis()
+                System.currentTimeMillis(),
+                0
             )
 
         val padding = convertDp2Px(2, context)
@@ -89,7 +90,7 @@ open class SlideToggle : AbstractToggleButton {
     override fun drawRound(canvas: Canvas?) {
         val x = getRoundX()
         mRoundPaint.color =
-            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis())
+            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis(), 0)
         mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
         canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
     }
