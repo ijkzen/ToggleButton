@@ -2,8 +2,8 @@ package com.github.ijkzen
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.drawable.ColorDrawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorRes
@@ -18,17 +18,27 @@ abstract class AbstractToggleButton : View {
 
     protected val mRoundPaint = Paint()
 
-    protected var mEnableBackgroundColor = 0
+    protected var mCheckedBackgroundColor = 0
 
-    protected var mDisableBackgroundColor = 0
+    protected var mUncheckedBackgroundColor = 0
 
-    protected var mEnableRoundColor = 0
+    protected var mCheckedRoundColor = 0
 
-    protected var mDisableRoundColor = 0
+    protected var mUncheckedRoundColor = 0
 
-    protected var mIsEnable = false
+    protected var mDisableCheckedBackgroundColor = 0
+
+    protected var mDisableUncheckedBackgroundColor = 0
+
+    protected var mDisableCheckedRoundColor = 0
+
+    protected var mDisableUncheckedRoundColor = 0
+
+    protected var mIsChecked = false
 
     protected var mIsChanged = false
+
+    protected var mIsEnabled = false
 
     protected var mTouchUpTime: Long = 0
 
@@ -94,97 +104,133 @@ abstract class AbstractToggleButton : View {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        drawBackground(canvas)
-        drawRound(canvas)
+        if (isButtonEnabled()) {
+            drawEnabledBackground(canvas)
+            drawEnabledRound(canvas)
 
-        if (System.currentTimeMillis() - mTouchUpTime <= mDuration + 200) {
-            invalidate()
+            if (System.currentTimeMillis() - mTouchUpTime <= mDuration + 200) {
+                invalidate()
+            } else {
+                mIsChanged = false
+            }
         } else {
-            mIsChanged = false
+            drawDisableBackground(canvas)
+            drawDisableRound(canvas)
         }
     }
 
-    open fun getCurrentColor(enableColor: Int, disableColor: Int, currentTime: Long, flag: Int): Int {
+    open fun getCurrentColor(
+        enableColor: Int,
+        disableColor: Int,
+        currentTime: Long,
+        flag: Int
+    ): Int {
         if (!mIsChanged) {
-            return if (mIsEnable) {
+            return if (mIsChecked) {
                 enableColor
             } else {
                 disableColor
             }
         }
 
-        val (originColor, targetColor) = if (mIsEnable) disableColor to enableColor else enableColor to disableColor
+        val (originColor, targetColor) = if (mIsChecked) disableColor to enableColor else enableColor to disableColor
 
-        val rate = (currentTime - mTouchUpTime) / mDuration.toFloat()
+        var rate = (currentTime - mTouchUpTime) / mDuration.toFloat()
 
-        return if (mIsEnable) {
-            when{
-                rate <= 0.4 ->{
-                    originColor
-                }
-                rate > 1 ->{
-                    targetColor
-                }
-                else ->{
-                    val alpha = (rate * 100).toInt()
-                    val drawable = ColorDrawable(targetColor)
-                    drawable.alpha = alpha
-                    drawable.color
-                }
-            }
-        } else {
-            when {
-                rate <= 0.6 ->{
-                    val alpha = 100 - (rate * 100).toInt()
-                    val drawable = ColorDrawable(originColor)
-                    drawable.alpha = alpha
-                    drawable.color
-                }
-                else -> {
-                    targetColor
-                }
-            }
+        if (rate > 1.0F) {
+            rate = 1.0F
         }
+
+        val redDelta = Color.red(targetColor) - Color.red(originColor)
+        val greenDelta = Color.green(targetColor) - Color.green(originColor)
+        val blueDelta = Color.blue(targetColor) - Color.blue(originColor)
+
+        return Color.argb(
+            0xFF,
+            (Color.red(originColor) + redDelta * rate).toInt(),
+            (Color.green(originColor) + greenDelta * rate).toInt(),
+            (Color.blue(originColor) + blueDelta * rate).toInt()
+        )
+
     }
 
-    abstract fun drawBackground(canvas: Canvas?)
+    abstract fun drawEnabledBackground(canvas: Canvas?)
 
-    abstract fun drawRound(canvas: Canvas?)
+    abstract fun drawEnabledRound(canvas: Canvas?)
 
-    fun setBackgroundEnableColor(@ColorRes color: Int) {
-        mEnableBackgroundColor = color
+    abstract fun drawDisableBackground(canvas: Canvas?)
+
+    abstract fun drawDisableRound(canvas: Canvas?)
+
+//  set button color
+
+    fun setCheckedBackgroundColor(@ColorRes color: Int) {
+        mCheckedBackgroundColor = color
         invalidate()
     }
 
-    fun setBackgroundDisableColor(@ColorRes color: Int) {
-        mDisableBackgroundColor = color
+    fun setUncheckedBackgroundColor(@ColorRes color: Int) {
+        mUncheckedBackgroundColor = color
         invalidate()
     }
 
-    fun setRoundEnableColor(@ColorRes color: Int) {
-        mEnableRoundColor = color
+    fun setCheckedRoundColor(@ColorRes color: Int) {
+        mCheckedRoundColor = color
         invalidate()
     }
 
-    fun setRoundDisableColor(@ColorRes color: Int) {
-        mDisableRoundColor = color
+    fun setUncheckedRoundColor(@ColorRes color: Int) {
+        mUncheckedRoundColor = color
         invalidate()
     }
 
-    fun setEnable(enable: Boolean) {
-        if (enable != mIsEnable) {
-            mIsEnable = !mIsEnable
+    fun setDisableCheckedBackgroundColor(@ColorRes color: Int) {
+        mDisableCheckedBackgroundColor = color
+        invalidate()
+    }
+
+    fun setDisableUncheckBackgroundColor(@ColorRes color: Int) {
+        mDisableUncheckedBackgroundColor = color
+        invalidate()
+    }
+
+    fun setDisableCheckedRoundColor(@ColorRes color: Int) {
+        mDisableCheckedRoundColor = color
+        invalidate()
+    }
+
+    fun setDisableUncheckedRoundColor(@ColorRes color: Int) {
+        mDisableUncheckedRoundColor = color
+        invalidate()
+    }
+
+//  set button status
+
+    fun setChecked(checked: Boolean) {
+        if (checked != mIsChecked) {
+            mIsChecked = !mIsChecked
             mIsChanged = true
             mTouchUpTime = System.currentTimeMillis()
             invalidate()
         }
     }
 
-    fun isEnable() = mIsEnable
+    fun isChecked() = mIsChecked
 
     fun toggle() {
-        setEnable(!mIsEnable)
+        if (isButtonEnabled()) {
+            setChecked(!mIsChecked)
+        }
     }
+
+    fun setButtonEnabled(enabled: Boolean) {
+        if (mIsEnabled != enabled) {
+            mIsEnabled = enabled
+            invalidate()
+        }
+    }
+
+    fun isButtonEnabled() = mIsEnabled
 
     fun setDuration(duration: Int) {
         mDuration = if (duration < DEFAULT_DURATION) {

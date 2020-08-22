@@ -1,28 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="enableBackgroundColor" format="color" />
-    <attr name="disableBackgroundColor" format="color" />
-    <attr name="enableRoundColor" format="color" />
-    <attr name="disableRoundColor" format="color" />
+    <attr name="checkedBackgroundColor" format="color" />
+    <attr name="uncheckedBackgroundColor" format="color" />
+    <attr name="checkedRoundColor" format="color" />
+    <attr name="uncheckedRoundColor" format="color" />
+    <attr name="disableCheckedBackgroundColor" format="color" />
+    <attr name="disableCheckedRoundColor" format="color" />
+    <attr name="disableUncheckedBackgroundColor" format="color" />
+    <attr name="disableUncheckedRoundColor" format="color" />
     <attr name="duration" format="integer" />
-    <attr name="enable" format="boolean" />
+    <attr name="checked" format="boolean" />
+    <attr name="enabled" format="boolean" />
 
     <declare-styleable name="ToggleButton">
-        <attr name="enableRoundColor" />
-        <attr name="disableRoundColor" />
-        <attr name="enableBackgroundColor" />
-        <attr name="disableBackgroundColor" />
+        <attr name="checkedRoundColor" />
+        <attr name="uncheckedRoundColor" />
+        <attr name="checkedBackgroundColor" />
+        <attr name="uncheckedBackgroundColor" />
+        <attr name="disableCheckedBackgroundColor" />
+        <attr name="disableCheckedRoundColor" />
+        <attr name="disableUncheckedBackgroundColor" />
+        <attr name="disableUncheckedRoundColor" />
         <attr name="duration" />
-        <attr name="enable" />
+        <attr name="checked" />
+        <attr name="enabled" />
     </declare-styleable>
 
     <declare-styleable name="SlideToggle">
-        <attr name="enableRoundColor" />
-        <attr name="disableRoundColor" />
-        <attr name="enableBackgroundColor" />
-        <attr name="disableBackgroundColor" />
-        <attr name="enable" />
+        <attr name="checkedRoundColor" />
+        <attr name="uncheckedRoundColor" />
+        <attr name="checkedBackgroundColor" />
+        <attr name="uncheckedBackgroundColor" />
+        <attr name="disableCheckedBackgroundColor" />
+        <attr name="disableCheckedRoundColor" />
+        <attr name="disableUncheckedBackgroundColor" />
+        <attr name="disableUncheckedRoundColor" />
+        <attr name="checked" />
+        <attr name="enabled" />
         <attr name="duration" />
     </declare-styleable>
 </resources>

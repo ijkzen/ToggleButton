@@ -30,35 +30,67 @@ open class ToggleButton : AbstractToggleButton {
             attributes,
             R.styleable.ToggleButton
         )
-        mEnableBackgroundColor = typedArray.getColor(
-            R.styleable.ToggleButton_enableBackgroundColor,
+        mCheckedBackgroundColor = typedArray.getColor(
+            R.styleable.ToggleButton_checkedBackgroundColor,
             ContextCompat.getColor(
                 context,
-                R.color.enableBackgroundColor
+                R.color.checkedBackgroundColor
             )
         )
 
-        mEnableRoundColor = typedArray.getColor(
-            R.styleable.ToggleButton_enableRoundColor,
+        mCheckedRoundColor = typedArray.getColor(
+            R.styleable.ToggleButton_checkedRoundColor,
             ContextCompat.getColor(
                 context,
-                R.color.enableRoundColor
+                R.color.checkedRoundColor
             )
         )
 
-        mDisableBackgroundColor = typedArray.getColor(
-            R.styleable.ToggleButton_disableBackgroundColor,
+        mUncheckedBackgroundColor = typedArray.getColor(
+            R.styleable.ToggleButton_uncheckedBackgroundColor,
             ContextCompat.getColor(
                 context,
-                R.color.disableBackgroundColor
+                R.color.uncheckedBackgroundColor
             )
         )
 
-        mDisableRoundColor = typedArray.getColor(
-            R.styleable.ToggleButton_disableRoundColor,
+        mUncheckedRoundColor = typedArray.getColor(
+            R.styleable.ToggleButton_uncheckedRoundColor,
             ContextCompat.getColor(
                 context,
-                R.color.disableRoundColor
+                R.color.uncheckedRoundColor
+            )
+        )
+
+        mDisableCheckedBackgroundColor = typedArray.getColor(
+            R.styleable.ToggleButton_disableCheckedBackgroundColor,
+            ContextCompat.getColor(
+                context,
+                R.color.disableCheckedBackgroundColor
+            )
+        )
+
+        mDisableCheckedRoundColor = typedArray.getColor(
+            R.styleable.ToggleButton_disableCheckedRoundColor,
+            ContextCompat.getColor(
+                context,
+                R.color.disableCheckedRoundColor
+            )
+        )
+
+        mDisableUncheckedBackgroundColor = typedArray.getColor(
+            R.styleable.ToggleButton_disableUncheckedBackgroundColor,
+            ContextCompat.getColor(
+                context,
+                R.color.disableUncheckBackgroundColor
+            )
+        )
+
+        mDisableUncheckedRoundColor = typedArray.getColor(
+            R.styleable.ToggleButton_disableUncheckedRoundColor,
+            ContextCompat.getColor(
+                context,
+                R.color.disableUncheckRoundColor
             )
         )
 
@@ -69,7 +101,8 @@ open class ToggleButton : AbstractToggleButton {
             duration
         }
 
-        mIsEnable = typedArray.getBoolean(R.styleable.ToggleButton_enable, false)
+        mIsChecked = typedArray.getBoolean(R.styleable.ToggleButton_checked, false)
+        mIsEnabled = typedArray.getBoolean(R.styleable.ToggleButton_enabled, true)
 
         typedArray.recycle()
     }
@@ -99,15 +132,15 @@ open class ToggleButton : AbstractToggleButton {
         mDefaultCircleMaxPadding = convertDp2Px(8, context)
     }
 
-    override fun drawBackground(canvas: Canvas?) {
+    override fun drawEnabledBackground(canvas: Canvas?) {
         val left = paddingStart
         val right = width - paddingEnd
         val top = paddingTop
         val bottom = height - paddingBottom
 
         mBackgroundPaint.color = getCurrentColor(
-            mEnableBackgroundColor,
-            mDisableBackgroundColor,
+            mCheckedBackgroundColor,
+            mUncheckedBackgroundColor,
             System.currentTimeMillis(),
             0
         )
@@ -117,10 +150,30 @@ open class ToggleButton : AbstractToggleButton {
         canvas?.drawRoundRect(backgroundRect, radius.toFloat(), radius.toFloat(), mBackgroundPaint)
     }
 
-    override fun drawRound(canvas: Canvas?) {
+    override fun drawEnabledRound(canvas: Canvas?) {
         val currentTime = System.currentTimeMillis()
         val point = getCircleCenter(currentTime)
-        mRoundPaint.color = getCurrentColor(mEnableRoundColor, mDisableRoundColor, currentTime, 1)
+        mRoundPaint.color = getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, currentTime, 1)
+        canvas?.drawCircle(point.x, point.y, getRoundRadius(currentTime), mRoundPaint)
+    }
+
+    override fun drawDisableBackground(canvas: Canvas?) {
+        val left = paddingStart
+        val right = width - paddingEnd
+        val top = paddingTop
+        val bottom = height - paddingBottom
+
+        mBackgroundPaint.color = if (isChecked()) mDisableCheckedBackgroundColor else mDisableUncheckedBackgroundColor
+
+        val backgroundRect = RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())
+        val radius = (bottom - top) / 2
+        canvas?.drawRoundRect(backgroundRect, radius.toFloat(), radius.toFloat(), mBackgroundPaint)
+    }
+
+    override fun drawDisableRound(canvas: Canvas?) {
+        val currentTime = System.currentTimeMillis()
+        val point = getCircleCenter(currentTime)
+        mRoundPaint.color = if (isChecked()) mDisableCheckedRoundColor else mDisableUncheckedRoundColor
         canvas?.drawCircle(point.x, point.y, getRoundRadius(currentTime), mRoundPaint)
     }
 
@@ -130,7 +183,7 @@ open class ToggleButton : AbstractToggleButton {
         val threeFifth = oneFifth * 3
         val fourFifth = oneFifth * 4
 
-        return if (mIsEnable) {
+        return if (mIsChecked) {
             when {
                 during <= 0 -> {
                     PointF(

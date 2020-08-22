@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="disableBackgroundColor">#42231F1F</color>
-    <color name="disableRoundColor">#F1F1F1</color>
-    <color name="enableBackgroundColor">#99DCF7</color>
-    <color name="enableRoundColor">#00A8EC</color>
+<!--button is enable    -->
+    <color name="uncheckedBackgroundColor">#E5E5E5</color>
+    <color name="uncheckedRoundColor">#F1F1F1</color>
+    <color name="checkedBackgroundColor">#0C84FF</color>
+    <color name="checkedRoundColor">#FFFFFF</color>
+
+<!--button is disable    -->
+    <color name="disableCheckedBackgroundColor">#80BCFA</color>
+    <color name="disableCheckedRoundColor">#BFDEFD</color>
+    <color name="disableUncheckBackgroundColor">#F3F3F3</color>
+    <color name="disableUncheckRoundColor">#F9F9F9</color>
 </resources>

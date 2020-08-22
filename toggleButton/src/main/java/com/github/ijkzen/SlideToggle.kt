@@ -21,24 +21,44 @@ open class SlideToggle : AbstractToggleButton {
     override fun initAttrs(attributes: AttributeSet?) {
         val typedArray = context.obtainStyledAttributes(attributes, R.styleable.SlideToggle)
 
-        mEnableBackgroundColor = typedArray.getColor(
-            R.styleable.SlideToggle_enableBackgroundColor,
-            ContextCompat.getColor(context, R.color.enableBackgroundColor)
+        mCheckedBackgroundColor = typedArray.getColor(
+            R.styleable.SlideToggle_checkedBackgroundColor,
+            ContextCompat.getColor(context, R.color.checkedBackgroundColor)
         )
 
-        mDisableBackgroundColor = typedArray.getColor(
-            R.styleable.SlideToggle_disableBackgroundColor,
-            ContextCompat.getColor(context, R.color.disableBackgroundColor)
+        mUncheckedBackgroundColor = typedArray.getColor(
+            R.styleable.SlideToggle_uncheckedBackgroundColor,
+            ContextCompat.getColor(context, R.color.uncheckedBackgroundColor)
         )
 
-        mEnableRoundColor = typedArray.getColor(
-            R.styleable.SlideToggle_enableRoundColor,
-            ContextCompat.getColor(context, R.color.enableRoundColor)
+        mCheckedRoundColor = typedArray.getColor(
+            R.styleable.SlideToggle_checkedRoundColor,
+            ContextCompat.getColor(context, R.color.checkedRoundColor)
         )
 
-        mDisableRoundColor = typedArray.getColor(
-            R.styleable.SlideToggle_disableRoundColor,
-            ContextCompat.getColor(context, R.color.disableRoundColor)
+        mUncheckedRoundColor = typedArray.getColor(
+            R.styleable.SlideToggle_uncheckedRoundColor,
+            ContextCompat.getColor(context, R.color.uncheckedRoundColor)
+        )
+
+        mDisableCheckedBackgroundColor = typedArray.getColor(
+            R.styleable.SlideToggle_disableCheckedBackgroundColor,
+            ContextCompat.getColor(context, R.color.disableCheckedBackgroundColor)
+        )
+
+        mDisableUncheckedBackgroundColor = typedArray.getColor(
+            R.styleable.SlideToggle_disableUncheckedBackgroundColor,
+            ContextCompat.getColor(context, R.color.disableUncheckBackgroundColor)
+        )
+
+        mDisableCheckedRoundColor = typedArray.getColor(
+            R.styleable.SlideToggle_disableCheckedRoundColor,
+            ContextCompat.getColor(context, R.color.disableCheckedRoundColor)
+        )
+
+        mDisableUncheckedRoundColor = typedArray.getColor(
+            R.styleable.SlideToggle_disableUncheckedRoundColor,
+            ContextCompat.getColor(context, R.color.disableUncheckRoundColor)
         )
 
         val duration = typedArray.getInt(R.styleable.SlideToggle_duration, DEFAULT_DURATION)
@@ -48,7 +68,8 @@ open class SlideToggle : AbstractToggleButton {
             duration
         }
 
-        mIsEnable = typedArray.getBoolean(R.styleable.SlideToggle_enable, false)
+        mIsChecked = typedArray.getBoolean(R.styleable.SlideToggle_checked, false)
+        mIsEnabled = typedArray.getBoolean(R.styleable.SlideToggle_enabled, true)
 
         typedArray.recycle()
     }
@@ -66,11 +87,11 @@ open class SlideToggle : AbstractToggleButton {
         mEndRoundX = width - paddingEnd - padding - mRadius
     }
 
-    override fun drawBackground(canvas: Canvas?) {
+    override fun drawEnabledBackground(canvas: Canvas?) {
         mBackgroundPaint.color =
             getCurrentColor(
-                mEnableBackgroundColor,
-                mDisableBackgroundColor,
+                mCheckedBackgroundColor,
+                mUncheckedBackgroundColor,
                 System.currentTimeMillis(),
                 0
             )
@@ -87,10 +108,34 @@ open class SlideToggle : AbstractToggleButton {
         canvas?.drawRoundRect(backgroundRect, radius.toFloat(), radius.toFloat(), mBackgroundPaint)
     }
 
-    override fun drawRound(canvas: Canvas?) {
+    override fun drawEnabledRound(canvas: Canvas?) {
         val x = getRoundX()
         mRoundPaint.color =
-            getCurrentColor(mEnableRoundColor, mDisableRoundColor, System.currentTimeMillis(), 1)
+            getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, System.currentTimeMillis(), 1)
+        mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
+        canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
+    }
+
+    override fun drawDisableBackground(canvas: Canvas?) {
+        mBackgroundPaint.color =
+            if (isChecked()) mDisableCheckedBackgroundColor else mDisableUncheckedBackgroundColor
+
+        val padding = convertDp2Px(2, context)
+        val left = paddingStart + padding
+        val right = width - paddingEnd - padding
+        val realHeight = height - paddingBottom - paddingTop
+        val top = paddingTop + realHeight / 4
+        val bottom = top + realHeight / 2
+
+        val backgroundRect = RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())
+        val radius = (bottom - top) / 2
+        canvas?.drawRoundRect(backgroundRect, radius.toFloat(), radius.toFloat(), mBackgroundPaint)
+    }
+
+    override fun drawDisableRound(canvas: Canvas?) {
+        val x = getRoundX()
+        mRoundPaint.color =
+            if (isChecked()) mDisableCheckedRoundColor else mDisableUncheckedRoundColor
         mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
         canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
     }
@@ -100,7 +145,7 @@ open class SlideToggle : AbstractToggleButton {
 
             val rate = (System.currentTimeMillis() - mTouchUpTime) / mDuration.toFloat()
 
-            val (originX, targetX) = if (mIsEnable) {
+            val (originX, targetX) = if (mIsChecked) {
                 mStartRoundX to mEndRoundX
             } else {
                 mEndRoundX to mStartRoundX
@@ -119,7 +164,7 @@ open class SlideToggle : AbstractToggleButton {
             }
 
         } else {
-            if (mIsEnable) {
+            if (mIsChecked) {
                 mEndRoundX.toFloat()
             } else {
                 mStartRoundX.toFloat()

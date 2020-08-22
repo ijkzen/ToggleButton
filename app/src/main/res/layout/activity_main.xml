@@ -14,9 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_marginBottom="30dp"
-        app:enable="true"
-        app:enableBackgroundColor="#0C84FF"
-        app:enableRoundColor="#FFFFFF" />
+        app:checked="false"
+        app:enabled="true" />
 
     <com.github.ijkzen.SlideToggle
         android:id="@+id/slide_toggle"
@@ -24,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/toggle1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        />
+        android:layout_marginTop="30dp" />
 
 </RelativeLayout>
