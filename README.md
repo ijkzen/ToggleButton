@@ -1,7 +1,7 @@
 ![bage](https://jitpack.io/v/ijkzen/ToggleButton.svg) ![week_download](https://jitpack.io/v/ijkzen/ToggleButton/week.svg) ![month_download](https://jitpack.io/v/ijkzen/ToggleButton/month.svg)
 ### Preview
 
-<div align=center><img src="./preview/preview.gif"/></div>
+<div align=center><img style="height:400px" src="./preview/preview.gif"/></div>
 
 ### Usage
 
@@ -37,11 +37,6 @@ dependencies {
         android:layout_centerHorizontal="true"
         android:layout_below="@id/toggle"
         android:layout_marginTop="30dp"
-        app:enable="true"
-        app:enableBackgroundColor="@android:color/holo_red_light"
-        app:enableRoundColor="@android:color/holo_green_light"
-        app:disableBackgroundColor="@android:color/holo_green_light"
-        app:disableRoundColor="@android:color/holo_red_light"
         android:layout_width="120dp"
         android:layout_height="70dp"/>
 ```
@@ -57,44 +52,79 @@ dependencies {
 2. Set `attributes` programmatically
 
 ```kotlin
-    fun setBackgroundEnableColor(@ColorRes color: Int) {
-        mEnableBackgroundColor = color
+    //  set button color
+
+    fun setCheckedBackgroundColor(@ColorRes color: Int) {
+        mCheckedBackgroundColor = color
         invalidate()
     }
 
-    fun setBackgroundDisableColor(@ColorRes color: Int) {
-        mDisableBackgroundColor = color
+    fun setUncheckedBackgroundColor(@ColorRes color: Int) {
+        mUncheckedBackgroundColor = color
         invalidate()
     }
 
-    fun setRoundEnableColor(@ColorRes color: Int) {
-        mEnableRoundColor = color
+    fun setCheckedRoundColor(@ColorRes color: Int) {
+        mCheckedRoundColor = color
         invalidate()
     }
 
-    fun setRoundDisableColor(@ColorRes color: Int) {
-        mDisableRoundColor = color
+    fun setUncheckedRoundColor(@ColorRes color: Int) {
+        mUncheckedRoundColor = color
         invalidate()
     }
 
-    fun setEnable(enable: Boolean) {
-        if (enable != mIsEnable) {
-            mIsEnable = !mIsEnable
+    fun setDisableCheckedBackgroundColor(@ColorRes color: Int) {
+        mDisableCheckedBackgroundColor = color
+        invalidate()
+    }
+
+    fun setDisableUncheckBackgroundColor(@ColorRes color: Int) {
+        mDisableUncheckedBackgroundColor = color
+        invalidate()
+    }
+
+    fun setDisableCheckedRoundColor(@ColorRes color: Int) {
+        mDisableCheckedRoundColor = color
+        invalidate()
+    }
+
+    fun setDisableUncheckedRoundColor(@ColorRes color: Int) {
+        mDisableUncheckedRoundColor = color
+        invalidate()
+    }
+
+//  set button status
+
+    fun setChecked(checked: Boolean) {
+        if (checked != mIsChecked) {
+            mIsChecked = !mIsChecked
             mIsChanged = true
             mTouchUpTime = System.currentTimeMillis()
             invalidate()
         }
     }
 
-    fun isEnable() = mIsEnable
+    fun isChecked() = mIsChecked
 
     fun toggle() {
-        setEnable(!mIsEnable)
+        if (isButtonEnabled()) {
+            setChecked(!mIsChecked)
+        }
     }
 
+    fun setButtonEnabled(enabled: Boolean) {
+        if (mIsEnabled != enabled) {
+            mIsEnabled = enabled
+            invalidate()
+        }
+    }
+
+    fun isButtonEnabled() = mIsEnabled
+
     fun setDuration(duration: Int) {
-        mDuration = if (duration < 300) {
-            300
+        mDuration = if (duration < DEFAULT_DURATION) {
+            DEFAULT_DURATION
         } else {
             duration
         }
