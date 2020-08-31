@@ -61,11 +61,11 @@ open class SlideToggle : AbstractToggleButton {
             ContextCompat.getColor(context, R.color.disableUncheckRoundColor)
         )
 
-        val duration = typedArray.getInt(R.styleable.SlideToggle_duration, DEFAULT_DURATION)
+        val duration = typedArray.getInt(R.styleable.SlideToggle_duration, DEFAULT_DURATION.toInt())
         mDuration = if (duration < DEFAULT_DURATION) {
             DEFAULT_DURATION
         } else {
-            duration
+            duration.toLong()
         }
 
         mIsChecked = typedArray.getBoolean(R.styleable.SlideToggle_checked, false)
@@ -92,7 +92,6 @@ open class SlideToggle : AbstractToggleButton {
             getCurrentColor(
                 mCheckedBackgroundColor,
                 mUncheckedBackgroundColor,
-                System.currentTimeMillis(),
                 0
             )
 
@@ -111,7 +110,7 @@ open class SlideToggle : AbstractToggleButton {
     override fun drawEnabledRound(canvas: Canvas?) {
         val x = getRoundX()
         mRoundPaint.color =
-            getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, System.currentTimeMillis(), 1)
+            getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, 1)
         mRoundPaint.setShadowLayer(5f, 0F, 3F, Color.GRAY)
         canvas?.drawCircle(x, mDefaultRoundCenterY.toFloat(), mRadius.toFloat(), mRoundPaint)
     }
@@ -141,33 +140,29 @@ open class SlideToggle : AbstractToggleButton {
     }
 
     private fun getRoundX(): Float {
-        return if (mIsChanged) {
-
-            val rate = (System.currentTimeMillis() - mTouchUpTime) / mDuration.toFloat()
-
-            val (originX, targetX) = if (mIsChecked) {
-                mStartRoundX to mEndRoundX
-            } else {
-                mEndRoundX to mStartRoundX
-            }
-
-            when {
-                rate <= 0 -> {
-                    mStartRoundX.toFloat()
-                }
-                rate < 1f -> {
-                    originX + (targetX - originX) * rate
-                }
-                else -> {
-                    targetX.toFloat()
-                }
-            }
-
-        } else {
-            if (mIsChecked) {
+        if (isInitStatus()) {
+            return if (isChecked()) {
                 mEndRoundX.toFloat()
             } else {
                 mStartRoundX.toFloat()
+            }
+        }
+
+        val (originX, targetX) = if (mIsChecked) {
+            mStartRoundX to mEndRoundX
+        } else {
+            mEndRoundX to mStartRoundX
+        }
+
+        return when {
+            mRate <= 0 -> {
+                originX.toFloat()
+            }
+            mRate < 1f -> {
+                originX + (targetX - originX) * mRate
+            }
+            else -> {
+                targetX.toFloat()
             }
         }
     }

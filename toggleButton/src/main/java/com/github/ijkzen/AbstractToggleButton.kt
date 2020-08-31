@@ -1,11 +1,14 @@
 package com.github.ijkzen
 
+import android.animation.TimeInterpolator
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.ColorRes
 
 abstract class AbstractToggleButton : View {
@@ -36,18 +39,18 @@ abstract class AbstractToggleButton : View {
 
     protected var mIsChecked = false
 
-    protected var mIsChanged = false
-
     protected var mIsEnabled = false
-
-    protected var mTouchUpTime: Long = 0
 
     protected var mDefaultRoundCenterY = 0
 
     protected var mDuration = DEFAULT_DURATION
 
+    private var mValueAnimator: ValueAnimator = ValueAnimator.ofFloat(0F, 1F)
+
+    protected var mRate: Float = 0F
+
     companion object {
-        const val DEFAULT_DURATION = 300
+        const val DEFAULT_DURATION: Long = 300
         const val DEFAULT_WIDTH = 45
         const val DEFAULT_HEIGHT = 26
     }
@@ -60,6 +63,15 @@ abstract class AbstractToggleButton : View {
     constructor(context: Context?, attributes: AttributeSet?) : super(context, attributes) {
         initAttrs(attributes)
         initPaint()
+    }
+
+    init {
+        mValueAnimator.duration = mDuration
+        mValueAnimator.interpolator = AccelerateDecelerateInterpolator()
+        mValueAnimator.addUpdateListener {
+            mRate = it.animatedValue as Float
+            invalidate()
+        }
     }
 
 
@@ -107,12 +119,6 @@ abstract class AbstractToggleButton : View {
         if (isButtonEnabled()) {
             drawEnabledBackground(canvas)
             drawEnabledRound(canvas)
-
-            if (System.currentTimeMillis() - mTouchUpTime <= mDuration + 200) {
-                invalidate()
-            } else {
-                mIsChanged = false
-            }
         } else {
             drawDisableBackground(canvas)
             drawDisableRound(canvas)
@@ -122,24 +128,13 @@ abstract class AbstractToggleButton : View {
     open fun getCurrentColor(
         enableColor: Int,
         disableColor: Int,
-        currentTime: Long,
         flag: Int
     ): Int {
-        if (!mIsChanged) {
-            return if (mIsChecked) {
-                enableColor
-            } else {
-                disableColor
-            }
+        if (isInitStatus()) {
+            return if (mIsChecked) enableColor else disableColor
         }
 
         val (originColor, targetColor) = if (mIsChecked) disableColor to enableColor else enableColor to disableColor
-
-        var rate = (currentTime - mTouchUpTime) / mDuration.toFloat()
-
-        if (rate > 1.0F) {
-            rate = 1.0F
-        }
 
         val redDelta = Color.red(targetColor) - Color.red(originColor)
         val greenDelta = Color.green(targetColor) - Color.green(originColor)
@@ -147,11 +142,10 @@ abstract class AbstractToggleButton : View {
 
         return Color.argb(
             0xFF,
-            (Color.red(originColor) + redDelta * rate).toInt(),
-            (Color.green(originColor) + greenDelta * rate).toInt(),
-            (Color.blue(originColor) + blueDelta * rate).toInt()
+            (Color.red(originColor) + redDelta * mRate).toInt(),
+            (Color.green(originColor) + greenDelta * mRate).toInt(),
+            (Color.blue(originColor) + blueDelta * mRate).toInt()
         )
-
     }
 
     abstract fun drawEnabledBackground(canvas: Canvas?)
@@ -161,6 +155,8 @@ abstract class AbstractToggleButton : View {
     abstract fun drawDisableBackground(canvas: Canvas?)
 
     abstract fun drawDisableRound(canvas: Canvas?)
+
+    protected fun isInitStatus() = mRate == 0F && !mValueAnimator.isStarted
 
 //  set button color
 
@@ -209,9 +205,7 @@ abstract class AbstractToggleButton : View {
     fun setChecked(checked: Boolean) {
         if (checked != mIsChecked) {
             mIsChecked = !mIsChecked
-            mIsChanged = true
-            mTouchUpTime = System.currentTimeMillis()
-            invalidate()
+            mValueAnimator.start()
         }
     }
 
@@ -232,11 +226,17 @@ abstract class AbstractToggleButton : View {
 
     fun isButtonEnabled() = mIsEnabled
 
-    fun setDuration(duration: Int) {
+    fun setDuration(duration: Long) {
         mDuration = if (duration < DEFAULT_DURATION) {
             DEFAULT_DURATION
         } else {
             duration
         }
+
+        mValueAnimator.duration = mDuration
+    }
+
+    fun setTimeInterpolator(interpolator: TimeInterpolator) {
+        mValueAnimator.interpolator = interpolator
     }
 }

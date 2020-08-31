@@ -21,7 +21,6 @@ open class ToggleButton : AbstractToggleButton {
 
     constructor(context: Context?) : super(context)
 
-
     constructor(context: Context?, attributes: AttributeSet?) : super(context, attributes)
 
     override fun initAttrs(attributes: AttributeSet?) {
@@ -94,11 +93,12 @@ open class ToggleButton : AbstractToggleButton {
             )
         )
 
-        val duration = typedArray.getInt(R.styleable.ToggleButton_duration, DEFAULT_DURATION)
+        val duration =
+            typedArray.getInt(R.styleable.ToggleButton_duration, DEFAULT_DURATION.toInt())
         mDuration = if (duration < DEFAULT_DURATION) {
             DEFAULT_DURATION
         } else {
-            duration
+            duration.toLong()
         }
 
         mIsChecked = typedArray.getBoolean(R.styleable.ToggleButton_checked, false)
@@ -141,7 +141,6 @@ open class ToggleButton : AbstractToggleButton {
         mBackgroundPaint.color = getCurrentColor(
             mCheckedBackgroundColor,
             mUncheckedBackgroundColor,
-            System.currentTimeMillis(),
             0
         )
 
@@ -151,10 +150,9 @@ open class ToggleButton : AbstractToggleButton {
     }
 
     override fun drawEnabledRound(canvas: Canvas?) {
-        val currentTime = System.currentTimeMillis()
-        val point = getCircleCenter(currentTime)
-        mRoundPaint.color = getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, currentTime, 1)
-        canvas?.drawCircle(point.x, point.y, getRoundRadius(currentTime), mRoundPaint)
+        val point = getCircleCenter()
+        mRoundPaint.color = getCurrentColor(mCheckedRoundColor, mUncheckedRoundColor, 1)
+        canvas?.drawCircle(point.x, point.y, getRoundRadius(), mRoundPaint)
     }
 
     override fun drawDisableBackground(canvas: Canvas?) {
@@ -163,7 +161,8 @@ open class ToggleButton : AbstractToggleButton {
         val top = paddingTop
         val bottom = height - paddingBottom
 
-        mBackgroundPaint.color = if (isChecked()) mDisableCheckedBackgroundColor else mDisableUncheckedBackgroundColor
+        mBackgroundPaint.color =
+            if (isChecked()) mDisableCheckedBackgroundColor else mDisableUncheckedBackgroundColor
 
         val backgroundRect = RectF(left.toFloat(), top.toFloat(), right.toFloat(), bottom.toFloat())
         val radius = (bottom - top) / 2
@@ -171,49 +170,53 @@ open class ToggleButton : AbstractToggleButton {
     }
 
     override fun drawDisableRound(canvas: Canvas?) {
-        val currentTime = System.currentTimeMillis()
-        val point = getCircleCenter(currentTime)
-        mRoundPaint.color = if (isChecked()) mDisableCheckedRoundColor else mDisableUncheckedRoundColor
-        canvas?.drawCircle(point.x, point.y, getRoundRadius(currentTime), mRoundPaint)
+        val point = getCircleCenter()
+        mRoundPaint.color =
+            if (isChecked()) mDisableCheckedRoundColor else mDisableUncheckedRoundColor
+        canvas?.drawCircle(point.x, point.y, getRoundRadius(), mRoundPaint)
     }
 
-    private fun getCircleCenter(currentTime: Long): PointF {
-        val during = currentTime - mTouchUpTime
+    private fun getCircleCenter(): PointF {
+        val during = mDuration * mRate
         val oneFifth = mDuration / 5.0f
         val threeFifth = oneFifth * 3
         val fourFifth = oneFifth * 4
 
-        return if (mIsChecked) {
-            when {
-                during <= 0 -> {
-                    PointF(
-                        mDefaultNormalRadius + mDefaultCircleMaxPadding.toFloat(),
-                        mDefaultRoundCenterY.toFloat()
-                    )
-                }
+        if (isInitStatus()) {
+            return if (mIsChecked) {
+                PointF(
+                    width.toFloat() - mDefaultNormalRadius - mDefaultCircleMaxPadding.toFloat(),
+                    mDefaultRoundCenterY.toFloat()
+                )
+            } else {
+                PointF(
+                    mDefaultNormalRadius + mDefaultCircleMaxPadding.toFloat(),
+                    mDefaultRoundCenterY.toFloat()
+                )
+            }
+        }
 
-                during in 1..oneFifth.toInt() -> {
+        return if (mIsChecked) {
+            when (during) {
+                in 0F..oneFifth -> {
                     val result = during / oneFifth
                     PointF(
                         (mDefaultCircleMinPadding + mDefaultNormalRadius + (mDefaultMaxRadius - mDefaultNormalRadius) * result),
                         mDefaultRoundCenterY.toFloat()
                     )
                 }
-
-                during in oneFifth.toInt() + 1..fourFifth.toInt() -> {
+                in oneFifth..fourFifth -> {
                     val initX = mDefaultMaxRadius + mDefaultCircleMinPadding
                     val targetX = width - mDefaultCircleMinPadding - mDefaultMinRadius
                     val result = (during - oneFifth) / threeFifth
                     PointF(initX + (targetX - initX) * result, mDefaultRoundCenterY.toFloat())
                 }
-
-                during in fourFifth.toInt() + 1..mDuration -> {
+                in fourFifth..mDuration.toFloat() -> {
                     val initX = width - mDefaultCircleMinPadding - mDefaultMinRadius
                     val targetX = width - mDefaultCircleMaxPadding - mDefaultNormalRadius
                     val result = (during - fourFifth) / oneFifth
                     PointF(initX + (targetX - initX) * result, mDefaultRoundCenterY.toFloat())
                 }
-
                 else -> {
                     PointF(
                         width.toFloat() - mDefaultNormalRadius - mDefaultCircleMaxPadding.toFloat(),
@@ -222,15 +225,8 @@ open class ToggleButton : AbstractToggleButton {
                 }
             }
         } else {
-            when {
-                during <= 0 -> {
-                    PointF(
-                        width.toFloat() - mDefaultNormalRadius - mDefaultCircleMaxPadding.toFloat(),
-                        mDefaultRoundCenterY.toFloat()
-                    )
-                }
-
-                during in 1..oneFifth.toInt() -> {
+            when (during) {
+                in 0F..oneFifth -> {
                     val initX =
                         width.toFloat() - mDefaultNormalRadius - mDefaultCircleMaxPadding.toFloat()
                     val targetX = width.toFloat() - mDefaultMaxRadius - mDefaultMinRadius.toFloat()
@@ -240,21 +236,18 @@ open class ToggleButton : AbstractToggleButton {
                         mDefaultRoundCenterY.toFloat()
                     )
                 }
-
-                during in oneFifth.toInt() + 1..fourFifth.toInt() -> {
+                in oneFifth..fourFifth -> {
                     val initX = width.toFloat() - mDefaultMaxRadius - mDefaultMinRadius.toFloat()
                     val targetX = mDefaultCircleMinPadding + mDefaultMinRadius
                     val result = (during - oneFifth) / threeFifth
                     PointF(initX + (targetX - initX) * result, mDefaultRoundCenterY.toFloat())
                 }
-
-                during in fourFifth.toInt() + 1..mDuration -> {
+                in fourFifth..mDuration.toFloat() -> {
                     val initX = mDefaultCircleMinPadding + mDefaultMinRadius
                     val targetX = mDefaultNormalRadius + mDefaultCircleMaxPadding
                     val result = (during - fourFifth) / oneFifth
                     PointF(initX + (targetX - initX) * result, mDefaultRoundCenterY.toFloat())
                 }
-
                 else -> {
                     PointF(
                         mDefaultNormalRadius.toFloat() + mDefaultCircleMaxPadding,
@@ -265,28 +258,23 @@ open class ToggleButton : AbstractToggleButton {
         }
     }
 
-    private fun getRoundRadius(currentTime: Long): Float {
-        val during = currentTime - mTouchUpTime
+    private fun getRoundRadius(): Float {
+        val during = mDuration * mRate
         val oneFifth = mDuration / 5.0f
         val threeFifth = oneFifth * 3
         val fourFifth = oneFifth * 4
-        return when {
-            during <= 0 -> {
-                mDefaultNormalRadius.toFloat()
-            }
-
-            during in 1..oneFifth.toInt() -> {
+        return when (during) {
+            in 0F..oneFifth -> {
                 mDefaultNormalRadius.toFloat() + (mDefaultMaxRadius - mDefaultNormalRadius) * (during / oneFifth)
             }
-            during in oneFifth.toInt() + 1..fourFifth.toInt() -> {
+            in oneFifth..fourFifth -> {
                 val result = (during - oneFifth) / threeFifth
                 mDefaultMaxRadius.toFloat() + (mDefaultMinRadius - mDefaultMaxRadius) * result
             }
-            during in fourFifth.toInt() + 1..mDuration -> {
+            in fourFifth..mDuration.toFloat() -> {
                 val result = (during - fourFifth) / oneFifth
                 mDefaultMinRadius.toFloat() + (mDefaultNormalRadius - mDefaultMinRadius) * result
             }
-
             else -> {
                 mDefaultNormalRadius.toFloat()
             }
