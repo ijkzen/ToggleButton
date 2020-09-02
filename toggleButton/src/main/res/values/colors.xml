@@ -2,7 +2,7 @@
 <resources>
 <!--button is enable    -->
     <color name="uncheckedBackgroundColor">#E5E5E5</color>
-    <color name="uncheckedRoundColor">#F1F1F1</color>
+    <color name="uncheckedRoundColor">#FFFFFF</color>
     <color name="checkedBackgroundColor">#0C84FF</color>
     <color name="checkedRoundColor">#FFFFFF</color>
 
