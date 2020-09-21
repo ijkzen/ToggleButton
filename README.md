@@ -1,4 +1,4 @@
-![bage](https://jitpack.io/v/ijkzen/ToggleButton.svg) ![week_download](https://jitpack.io/v/ijkzen/ToggleButton/week.svg) ![month_download](https://jitpack.io/v/ijkzen/ToggleButton/month.svg)
+![bage](https://jitpack.io/v/ijkzen/ToggleButton.svg) ![week_download](https://jitpack.io/v/ijkzen/ToggleButton/week.svg) ![month_download](https://jitpack.io/v/ijkzen/ToggleButton/month.svg) ![build status](https://github.com/ijkzen/ToggleButton/workflows/ToggleButton/badge.svg)
 ### Preview
 
 <div align=center><img style="height:400px" src="./preview/preview.gif"/></div>
